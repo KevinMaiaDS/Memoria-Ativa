@@ -1,6 +1,6 @@
 // Memória Ativa — Vercel serverless backend
 // A chave OPENAI_API_KEY fica SOMENTE no servidor. Nunca coloque a chave no HTML.
-const MODEL = process.env.OPENAI_MODEL || 'gpt-5.6-luna';
+const MODEL = process.env.OPENAI_MODEL || 'gpt-6-luna';
 const REVIEW_MODEL = process.env.OPENAI_REVIEW_MODEL || MODEL;
 const API_KEY = process.env.OPENAI_API_KEY;
 
