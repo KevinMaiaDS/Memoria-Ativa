@@ -1,50 +1,34 @@
-# Memória Ativa — versão para celular
+# Memória Ativa
 
-Esta versão usa HTML no navegador e possui dois caminhos de geração:
+Aplicativo de recuperação ativa com geração de perguntas por IA.
 
-- **Gerador local/offline:** funciona no próprio navegador e não usa créditos da OpenAI.
-- **Gerador com IA:** usa `api/generate.js` e a API da OpenAI para análise semântica. Esse modo exige `OPENAI_API_KEY` e créditos disponíveis na conta da API.
+## IA hospedada
 
-Quando o modo IA falha (por exemplo, por falta de créditos, chave ausente ou servidor indisponível), o aplicativo agora tenta automaticamente o gerador local para não interromper o estudo.
+A geração semântica usa a Gemini API da Google. A chave **não** fica no HTML: configure `GEMINI_API_KEY` como variável de ambiente na Vercel.
 
-## Estrutura
-- `index.html` — aplicativo
-- `api/generate.js` — geração por IA em 3 etapas
-- `api/health.js` — teste do servidor
-- `server.js` — servidor local para executar o app no navegador
-- `vercel.json` — configuração
+Modelo padrão: `gemini-3.8-flash`.
 
-## Executar localmente
+O fluxo da geração é:
 
-Requer Node.js 18 ou superior.
+1. material → fatos atômicos;
+2. fatos + material → perguntas candidatas;
+3. material + candidatas → auditoria final.
+
+O aplicativo mantém um gerador local como fallback, mas a geração local não substitui a qualidade da geração semântica por IA.
+
+## Vercel
+
+Variáveis recomendadas:
+
+- `GEMINI_API_KEY` — obrigatória para geração com IA.
+- `GEMINI_MODEL` — opcional; padrão `gemini-3.8-flash`.
+
+Não coloque a chave no `index.html` nem no GitHub.
+
+## Execução local
 
 ```bash
 npm start
 ```
 
-Depois abra:
-
-```text
-http://localhost:3000
-```
-
-O teste do servidor fica em:
-
-```text
-http://localhost:3000/api/health
-```
-
-O servidor local permite que o endpoint `/api/generate` seja encontrado corretamente. Porém, ele **não elimina a cobrança da API da OpenAI**: o modo IA ainda precisa de uma chave e de créditos.
-
-## Usar somente sem API
-
-Não é necessário configurar `OPENAI_API_KEY` para estudar ou usar o gerador local. O botão **Gerar com IA** também cai automaticamente para a geração local quando a API não estiver disponível.
-
-## Publicação na Vercel
-
-1. Importe o projeto na Vercel.
-2. Em Environment Variables, configure `OPENAI_API_KEY` se quiser usar o modo IA.
-3. Opcionalmente, defina `OPENAI_MODEL` e `OPENAI_REVIEW_MODEL`.
-4. Faça o deploy.
-
-Nunca coloque `OPENAI_API_KEY` dentro de `index.html`.
+Para usar IA localmente, defina `GEMINI_API_KEY` no ambiente antes de iniciar o servidor.

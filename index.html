@@ -140,7 +140,7 @@ hr{border:0;border-top:1px solid #333;margin:15px 0}
 <label>Material</label><textarea id="genSource" style="min-height:220px" placeholder="Cole aqui o conteúdo que você quer transformar em perguntas..."></textarea>
 <label>Quantidade máxima</label><input id="genLimit" type="number" min="1" max="50" value="50">
 <div class="row"><button onclick="generateQuestions()">Gerar localmente</button><button onclick="generateQuestionsAI()">Gerar com IA</button><button onclick="clearGenerator()">Limpar</button></div>
-<p class="small">Gerar localmente usa o mecanismo offline. <b>Gerar com IA</b> usa o servidor local opcional para análise semântica do material e devolve perguntas estruturadas; o código do app continua controlando revisão, duplicatas e salvamento.</p>
+<p class="small">Gerar localmente usa o mecanismo offline. <b>Gerar com IA</b> usa a IA hospedada para análise semântica do material e devolve perguntas estruturadas; o código do app continua controlando revisão, duplicatas e salvamento.</p>
 </div>
 <div id="generatorPreview"></div>
 </section>
@@ -2996,7 +2996,7 @@ async function generateQuestionsAI(){
     if(localCandidates.length){
       window.pendingGenerated=localCandidates;
       const manualTags=normalizeTags(document.getElementById('genTags')?.value||'');
-      box.innerHTML=`<div class="card"><div class="big">IA indisponível — geração local usada</div><p>${esc(err.message||String(err))}</p><p class="small">O gerador local não usa créditos da OpenAI. Revise as perguntas antes de adicionar.</p>${localCandidates.map((x,i)=>{const auto=v36AutoConceptTags(x.q,x.a,cat);return `<div class="listitem"><label>Pergunta ${i+1}</label><textarea id="genQ${i}" style="min-height:75px">${esc(x.q)}</textarea><label>Resposta ${i+1}</label><textarea id="genA${i}" style="min-height:90px">${esc(x.a)}</textarea><p class="small">Tags automáticas: ${auto.length?auto.map(t=>`<span class="badge">${esc(t)}</span>`).join(' '):'nenhuma'}</p></div>`}).join('')}<div class="row"><button onclick="addGeneratedQuestions()">Adicionar perguntas revisadas</button><button onclick="cancelGenerated()">Cancelar</button></div><p class="small">Tags que você informou: ${esc(manualTags.join(', ')||'nenhuma')}.</p></div>`;
+      box.innerHTML=`<div class="card"><div class="big">IA indisponível — geração local usada</div><p>${esc(err.message||String(err))}</p><p class="small">O gerador local não usa créditos de IA. Revise as perguntas antes de adicionar.</p>${localCandidates.map((x,i)=>{const auto=v36AutoConceptTags(x.q,x.a,cat);return `<div class="listitem"><label>Pergunta ${i+1}</label><textarea id="genQ${i}" style="min-height:75px">${esc(x.q)}</textarea><label>Resposta ${i+1}</label><textarea id="genA${i}" style="min-height:90px">${esc(x.a)}</textarea><p class="small">Tags automáticas: ${auto.length?auto.map(t=>`<span class="badge">${esc(t)}</span>`).join(' '):'nenhuma'}</p></div>`}).join('')}<div class="row"><button onclick="addGeneratedQuestions()">Adicionar perguntas revisadas</button><button onclick="cancelGenerated()">Cancelar</button></div><p class="small">Tags que você informou: ${esc(manualTags.join(', ')||'nenhuma')}.</p></div>`;
     }else{
       box.innerHTML=`<div class="card"><div class="big">Não foi possível gerar perguntas</div><p>${esc(err.message||String(err))}</p><p class="small">A IA está indisponível e o gerador local não encontrou relações suficientes no material. Tente um texto mais estruturado.</p></div>`;
     }
